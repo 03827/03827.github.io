@@ -1,0 +1,184 @@
+
+# Bootstrap 5 中階使用者教學
+
+## 1️⃣ 網格系統進階應用
+
+### 說明
+Bootstrap 的網格系統使用 `row` + `col-*` 組合，可以快速建立響應式佈局。中階技巧包含 **自動排列、垂直對齊與間距控制**。
+
+### 範例
+```html
+<div class="container">
+  <div class="row align-items-center">
+    <div class="col-md-6 bg-primary text-white p-3">
+      左側內容
+    </div>
+    <div class="col-md-6 bg-warning text-dark p-3">
+      右側內容
+    </div>
+  </div>
+</div>
+```
+
+---
+
+## 2️⃣ Utility API - 自訂樣式
+
+### 說明
+Bootstrap 5 提供 `utilities API`，可以自訂 class 並控制邊距、寬度、顏色等，無需寫 CSS。
+
+### 範例
+```html
+<div class="bg-dark text-white p-4 rounded-3 w-50 mx-auto">
+  <p class="text-center fs-4 mb-0">自訂寬度與文字樣式</p>
+</div>
+```
+
+---
+
+## 3️⃣ 圖片與排版技巧
+
+### 說明
+- `img-fluid`：響應式圖片
+- `float-*`：圖片對齊
+- `text-*`：控制文字對齊方向
+
+### 範例
+```html
+<div class="clearfix">
+  <img src="https://via.placeholder.com/150" class="img-fluid float-start me-3 rounded" alt="Sample Image">
+  <p>這是一段繞圖排版的文字，圖片在左側，文字環繞排列。</p>
+</div>
+```
+
+---
+
+## 4️⃣ 表單驗證與自訂樣式
+
+### 說明
+Bootstrap 提供內建的表單驗證樣式，可使用 `was-validated` 或 JavaScript 驗證。
+
+### 範例
+```html
+<form class="needs-validation" novalidate>
+  <div class="mb-3">
+    <label for="email" class="form-label">電子郵件</label>
+    <input type="email" class="form-control" id="email" required>
+    <div class="invalid-feedback">請輸入有效的電子郵件。</div>
+  </div>
+  <button class="btn btn-primary" type="submit">送出</button>
+</form>
+```
+
+### JavaScript 驗證
+```html
+<script>
+  (() => {
+    'use strict';
+    document.querySelectorAll('.needs-validation').forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) event.preventDefault();
+        form.classList.add('was-validated');
+      });
+    });
+  })();
+</script>
+```
+
+---
+
+## 5️⃣ JavaScript 元件 - 模態框與 Toast
+
+### 模態框（Modal）
+```html
+<!-- Button -->
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal">開啟模態框</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">提示</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">這是模態框的內容。</div>
+    </div>
+  </div>
+</div>
+```
+
+### Toast 通知
+```html
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div class="toast show">
+    <div class="toast-header">
+      <strong class="me-auto">通知</strong>
+      <small>剛剛</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      成功送出表單！
+    </div>
+  </div>
+</div>
+```
+
+---
+
+## 6️⃣ 建立小型 Dashboard Layout
+
+### 範例
+```html
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card bg-light mb-3">
+        <div class="card-body">
+          <h5 class="card-title">側邊選單</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">主頁</li>
+            <li class="list-group-item">報表</li>
+            <li class="list-group-item">設定</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header">用戶清單</div>
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>Email</th>
+              <th>狀態</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>小明</td>
+              <td>ming@example.com</td>
+              <td><span class="badge bg-success">啟用</span></td>
+            </tr>
+            <tr>
+              <td>小華</td>
+              <td>hua@example.com</td>
+              <td><span class="badge bg-secondary">停用</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+---
+
+## 🎁 結語：中階技巧關鍵字
+- `Utility Classes`
+- `Responsive Grid`
+- `Modals / Toasts`
+- `Form Validation`
+- `Card + Table Combo`
