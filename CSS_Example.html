@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS 初學者教學</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .example-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 20px;
+      background-color: #fff;
+    }
+    .color-example {
+      color: blue;
+    }
+    .bg-example {
+      background-color: lightyellow;
+      padding: 10px;
+    }
+    .font-example {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .box-example {
+      border: 2px dashed green;
+      padding: 15px;
+      margin-top: 10px;
+    }
+    .class-example {
+      color: red;
+    }
+    .id-example {
+      color: purple;
+    }
+    .flex-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap; /* 新增: 讓項目可以換行 */
+    }
+    .flex-item {
+      background-color: #add8e6;
+      padding: 20px;
+      flex: 1;
+      text-align: center;
+      min-width: 100px; /* 新增: 設置項目的最小寬度 */
+    }
+    .flex-container.row {
+      flex-direction: row; /* 預設：水平方向排列 */
+    }
+    .flex-container.column {
+      flex-direction: column; /* 改為垂直方向排列 */
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .grid-item {
+      background-color: #ffe4b5;
+      padding: 20px;
+      text-align: center;
+    }
+    :root {
+      --main-color: #3498db;
+      --accent-color: #2ecc71;
+    }
+    .variable-example {
+      color: var(--main-color);
+      background-color: var(--accent-color);
+      padding: 10px;
+    }
+    .nesting-parent {
+      color: #333;
+    }
+    .nesting-parent .child {
+      color: #999;
+    }
+    .fixed-size {
+      width: 200px;
+      height: 100px;
+    }
+    .relative-size {
+      width: 50%;
+      height: 30%;
+    }
+    .em-size {
+      font-size: 2em;
+      margin-top: 1.5em;
+    }
+    .rem-size {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .viewport-size {
+      width: 50vw;
+      height: 50vh;
+    }
+    .mixed-size {
+      width: 50%;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>CSS 初學者教學</h1>
+  <p>這是一份為初學者設計的 CSS 教學文件，透過範例與實際效果，協助您理解 CSS 的基礎概念與用法，提升前端樣式編排的能力。</p>
+
+  <h2>1. 改變文字顏色</h2>
+  <div class="example-box">
+    <p class="color-example">這段文字是藍色的。</p>
+  </div>
+
+  <h2>2. 改變背景顏色</h2>
+  <div class="example-box">
+    <p class="bg-example">這段文字有淺黃色背景。</p>
+  </div>
+
+  <h2>3. 修改字體大小與粗細</h2>
+  <div class="example-box">
+    <p class="font-example">這段文字較大且為粗體。</p>
+  </div>
+
+  <h2>4. 加入邊框與內距</h2>
+  <div class="example-box">
+    <div class="box-example">這個區塊有綠色虛線邊框與內距。</div>
+  </div>
+
+  <h2>5. 類別與 ID 的使用</h2>
+  <div class="example-box">
+    <p class="class-example">這是使用類別（class）的樣式。</p>
+    <p id="unique" class="id-example">這是使用 ID 的樣式。</p>
+  </div>
+
+  <h2>6. 排版：Flexbox 基礎</h2>
+  <div class="example-box">
+    <div class="flex-container">
+      <div class="flex-item">項目 1</div>
+      <div class="flex-item">項目 2</div>
+      <div class="flex-item">項目 3</div>
+    </div>
+    <p>Flexbox 是 CSS 中強大的排版工具，適用於橫向或縱向的排列。</p>
+    <h3>Flexbox：設定方向</h3>
+    <p>可以使用 `flex-direction` 屬性來決定項目的排列方向：</p>
+    <ul>
+      <li><code>row</code>: 水平方向排列（預設）</li>
+      <li><code>column</code>: 垂直方向排列</li>
+    </ul>
+    <div class="flex-container column">
+      <div class="flex-item">項目 1</div>
+      <div class="flex-item">項目 2</div>
+      <div class="flex-item">項目 3</div>
+    </div>
+    <p>以上範例中，`flex-direction: column` 讓項目從上至下垂直排列。</p>
+  </div>
+
+   <h2>7. 設定元素大小：使用不同單位</h2>
+
+  <h3>1. 使用像素（px）</h3>
+  <div class="example-box">
+    <div class="fixed-size">這個區塊使用像素來設定大小。</div>
+    <p>這個區塊的寬度為 200px，高度為 100px，這是固定的大小。</p>
+  </div>
+
+  <h3>2. 使用百分比（%）</h3>
+  <div class="example-box">
+    <div class="relative-size">這個區塊使用百分比來設定大小。</div>
+    <p>這個區塊的寬度是父元素的 50%，高度是父元素的 30%。</p>
+  </div>
+
+  <h3>3. 使用 em</h3>
+  <div class="example-box">
+    <div class="em-size">這個區塊使用 em 單位來設定字體大小與間距。</div>
+    <p>這個區塊的字體大小是父元素字體大小的 2 倍，並且上邊距為字體大小的 1.5 倍。</p>
+  </div>
+
+  <h3>4. 使用 rem</h3>
+  <div class="example-box">
+    <div class="rem-size">這個區塊使用 rem 單位來設定字體大小與間距。</div>
+    <p>這個區塊的字體大小是根元素字體大小的 1.5 倍，下邊距為根元素字體大小的 2 倍。</p>
+  </div>
+
+  <h3>5. 使用視口單位（vh 和 vw）</h3>
+  <div class="example-box">
+    <div class="viewport-size">這個區塊使用視口單位來設定大小。</div>
+    <p>這個區塊的寬度是視口寬度的 50%，高度是視口高度的 50%。</p>
+  </div>
+
+  <h3>6. 使用百分比配合固定大小</h3>
+  <div class="example-box">
+    <div class="mixed-size">這個區塊使用百分比與固定像素結合來設定大小。</div>
+    <p>這個區塊的寬度為父元素的 50%，高度為 200px。</p>
+  </div>
+
+  <h2>8. 巢狀選擇器與作用域</h2>
+  <div class="example-box">
+    <div class="nesting-parent">
+      這是父元素
+      <div class="child">這是子元素，文字顏色較淡。</div>
+    </div>
+    <p>巢狀選擇器讓樣式只影響特定結構中的子元素，常用於元件樣式隔離。</p>
+  </div>
+
+  <h2>結語</h2>
+  <p>這些是 CSS 的初學者基礎技巧，幫助您更靈活地掌握版面設計。接下來您可以學習更多進階的內容，如 CSS Grid、變數、SCSS 預處理器等，以進一步強化前端技能。</p>
+</body>
+</html>
