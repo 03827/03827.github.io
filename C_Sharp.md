@@ -1,4 +1,4 @@
-# C# 10 小時完整教案
+# C# 教學
 
 ---
 
@@ -50,11 +50,31 @@ class Program
 
 ### 🧑‍💻 範例程式
 ```csharp
-int age = 30;
+int age = 18;
 string name = "Linda";
+string lastName = "Chen";
 bool isMember = true;
+Console.WriteLine("1. 姓名: {0}, 年齡: {1}, 會員: {2}", name, age, isMember);
+Console.WriteLine("1-1. 姓名: {2}, 年齡: {1}, 會員: {0}", name, age, isMember);
+Console.WriteLine("1-2. 姓名: {2}, 年齡: {1}, 會員: {0}\n", isMember, age, name);
 
-Console.WriteLine($"姓名: {name}, 年齡: {age}, 會員: {isMember}");
+age = age + 2;
+name = name + ' ' + lastName;
+Console.WriteLine($"2. 姓名: {name}, 年齡: {age}, 會員: {isMember}");
+
+age += 2;
+name += " " + 'I';
+Console.WriteLine($"3. 姓名: {name}, 年齡: {age}, 會員: {isMember}");
+
+age++;
+name = name + "I";
+Console.WriteLine($"4. 姓名: {name}, 年齡: {age}, 會員: {isMember}");
+
+++age;
+Console.WriteLine($"5. 姓名: {name}, 年齡: {age}, 會員: {isMember}");
+
+Console.WriteLine($"6. 姓名: {name}, 年齡: {age++}, 會員: {isMember}");
+Console.WriteLine($"7. 姓名: {name}, 年齡: {++age}, 會員: {isMember}");
 ```
 
 ### 📝 小練習
@@ -146,49 +166,21 @@ do
 ### 🎯 教學目標
 - 定義與呼叫方法
 - 使用參數與回傳值
+- 理解方法多載與預設參數
 
 ### 📚 教學內容
 1. 方法語法結構（參數與回傳值）
-2. 預設參數
+2. 傳值、傳參考（ref/out）
+3. 預設參數與多載 overload
 
 ### 🧑‍💻 範例程式
 ```csharp
-// 無參數、無回傳
-static void SayHello()
+static int Multiply(int x, int y = 2)
 {
-    Console.WriteLine("Hello!");
+    return x * y;
 }
 
-// 一個 int 參數、int 回傳值
-static int Square(int number)
-{
-    return number * number;
-}
-
-// 兩個 string 參數、string 回傳值
-static string FullName(string first, string last)
-{
-    return $"{first} {last}";
-}
-
-// 三個 double 參數、double 回傳值（計算平均）
-static double Average(double a, double b, double c)
-{
-    return (a + b + c) / 3;
-}
-
-// 帶預設參數，bool 回傳
-static bool IsAdult(int age = 18)
-{
-    return age >= 18;
-}
-
-// 呼叫示範
-SayHello();
-Console.WriteLine(Square(4));
-Console.WriteLine(FullName("Amy", "Chen"));
-Console.WriteLine(Average(75.5, 80.2, 92));
-Console.WriteLine(IsAdult(16));
+Console.WriteLine(Multiply(5));
 ```
 
 ### 📝 小練習
@@ -207,49 +199,23 @@ Console.WriteLine(IsAdult(16));
 ### 📚 教學內容
 1. 類別與建構子
 2. 屬性（get/set）
-3. 存取修飾詞：public、private、protected
-4. 繼承與 override
-5. 抽象類別與介面（簡介）
+3. 繼承與 override
+4. 抽象類別與介面（簡介）
 
 ### 🧑‍💻 範例程式
 ```csharp
-// 類別與建構子
 class Animal
 {
-    public string Name { get; set; }
-    protected int Age { get; set; }
-    private string Secret = "我是一個秘密";
-
-    public Animal(string name, int age)
-    {
-        Name = name;
-        Age = age;
-    }
-
-    public virtual void Speak()
-    {
-        Console.WriteLine("發出聲音");
-    }
-
-    public void ShowSecret()
-    {
-        Console.WriteLine(Secret);
-    }
+    public virtual void Speak() => Console.WriteLine("發出聲音");
 }
 
 class Dog : Animal
 {
-    public Dog(string name, int age) : base(name, age) {}
-
-    public override void Speak()
-    {
-        Console.WriteLine("汪汪!");
-    }
+    public override void Speak() => Console.WriteLine("汪汪!");
 }
 
-Animal pet = new Dog("小黑", 3);
+Animal pet = new Dog();
 pet.Speak();
-pet.ShowSecret();
 ```
 
 ### 📝 小練習
