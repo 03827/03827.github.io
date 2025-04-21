@@ -253,12 +253,7 @@ class Animal
     {
         Name = name;
         Age = age;
-    }
-
-    public virtual void Speak()
-    {
-        Console.WriteLine("發出聲音");
-    }
+    }    
 
     public void ShowSecret()
     {
@@ -268,12 +263,9 @@ class Animal
 
 class Dog : Animal
 {
-    public Dog(string name, int age) : base(name, age) {}
-
-    public override void Speak()
+    public Dog(string name, int age) : base(name, age)
     {
-        Console.WriteLine("汪汪!");
-    }
+    }    
 }
 
 Animal pet = new Dog("小黑", 3);
