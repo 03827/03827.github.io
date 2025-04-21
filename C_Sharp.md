@@ -265,11 +265,16 @@ class Dog : Animal
 {
     public Dog(string name, int age) : base(name, age)
     {
-    }    
+    }
+
+    public void Speak(string sound)
+    {
+        Console.WriteLine(sound);
+    }
 }
 
-Animal pet = new Dog("小黑", 3);
-pet.Speak();
+Dog pet = new Dog("小黑", 3);
+pet.Speak("汪汪");
 pet.ShowSecret();
 ```
 
