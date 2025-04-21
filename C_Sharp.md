@@ -170,17 +170,46 @@ do
 
 ### 📚 教學內容
 1. 方法語法結構（參數與回傳值）
-2. 傳值、傳參考（ref/out）
-3. 預設參數與多載 overload
+2. 預設參數
 
 ### 🧑‍💻 範例程式
 ```csharp
-static int Multiply(int x, int y = 2)
+// 無參數、無回傳
+static void SayHello()
 {
-    return x * y;
+    Console.WriteLine("Hello!");
 }
 
-Console.WriteLine(Multiply(5));
+// 一個 int 參數、int 回傳值
+static int Square(int number)
+{
+    return number * number;
+}
+
+// 兩個 string 參數、string 回傳值
+static string FullName(string first, string last)
+{
+    return $"{first} {last}";
+}
+
+// 三個 double 參數、double 回傳值（計算平均）
+static double Average(double a, double b, double c)
+{
+    return (a + b + c) / 3;
+}
+
+// 帶預設參數，bool 回傳
+static bool IsAdult(int age = 18)
+{
+    return age >= 18;
+}
+
+// 呼叫示範
+SayHello();
+Console.WriteLine(Square(4));
+Console.WriteLine(FullName("Amy", "Chen"));
+Console.WriteLine(Average(75.5, 80.2, 92));
+Console.WriteLine(IsAdult(16));
 ```
 
 ### 📝 小練習
@@ -199,23 +228,49 @@ Console.WriteLine(Multiply(5));
 ### 📚 教學內容
 1. 類別與建構子
 2. 屬性（get/set）
-3. 繼承與 override
-4. 抽象類別與介面（簡介）
+3. 存取修飾詞：public、private、protected
+4. 繼承與 override
+5. 抽象類別與介面（簡介）
 
 ### 🧑‍💻 範例程式
 ```csharp
+// 類別與建構子
 class Animal
 {
-    public virtual void Speak() => Console.WriteLine("發出聲音");
+    public string Name { get; set; }
+    protected int Age { get; set; }
+    private string Secret = "我是一個秘密";
+
+    public Animal(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+
+    public virtual void Speak()
+    {
+        Console.WriteLine("發出聲音");
+    }
+
+    public void ShowSecret()
+    {
+        Console.WriteLine(Secret);
+    }
 }
 
 class Dog : Animal
 {
-    public override void Speak() => Console.WriteLine("汪汪!");
+    public Dog(string name, int age) : base(name, age) {}
+
+    public override void Speak()
+    {
+        Console.WriteLine("汪汪!");
+    }
 }
 
-Animal pet = new Dog();
+Animal pet = new Dog("小黑", 3);
 pet.Speak();
+pet.ShowSecret();
 ```
 
 ### 📝 小練習
@@ -314,4 +369,3 @@ List<Contact> contacts = new List<Contact>();
 - 將資料儲存到檔案，下次啟動時讀取
 - 將 LINQ 套用在查詢功能上
 - 建立簡易選單介面（用 switch 實作）
-
