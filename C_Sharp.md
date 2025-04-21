@@ -327,15 +327,22 @@ catch (Exception ex)
 
 ### 🧑‍💻 範例程式
 ```csharp
-List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
+List<int> numbers = new List<int> { 2, 1, 8, 4, 3, 9, 4, 6, 5, 1 };
 var evens = numbers.Where(n => n % 2 == 0);
-
 foreach (var n in evens)
 {
-    Console.WriteLine(n);
+    Console.Write($"{n}, ");
 }
 
+Console.WriteLine();
 
+numbers.Sort((a, b) => b - a);
+foreach (var n in numbers)
+{
+    Console.Write($"{n}, ");
+}
+```
+```csharp
 //Dictionary<key型別, Value型別>
 char letter = 'c';
 Dictionary<string, string> dictForASCII = new(){
@@ -364,7 +371,8 @@ foreach (var (key, val) in dictForASCII)
 
 ### 📝 小練習
 1. 建立一個包含姓名的 List，使用 LINQ 查詢特定名字。
-2. 使用 Dictionary 儲存產品與價格，並列出所有項目。
+2. 將範例中的 List 進行排序，排序要求為所有奇數在數列的左邊，全部偶數都在右邊，無須處理數字大小順序。
+3. 使用迴圈建立 1 個 Dictionary，用以儲存字母A-Z與對應的ASCII Code (int)，並列出所有項目。
 
 ---
 
