@@ -158,7 +158,23 @@ do
 ### 📝 小練習
 1. 撰寫一段判斷成績等級的 if-else 程式。
 2. 使用 while 迴圈印出 1 到 10。
-
+3. 使用迴圈印出：
+```
+*
+**
+***
+****
+(中間省略...)
+**********
+```
+4. 使用迴圈印出：
+```
+    *
+   * *
+  * * *
+ * * * *
+* * * * *
+```
 ---
 
 ## 第 4.5 小時：方法與參數
@@ -329,6 +345,32 @@ foreach (var n in evens)
 {
     Console.WriteLine(n);
 }
+
+
+//Dictionary<key型別, Value型別>
+char letter = 'c';
+Dictionary<string, string> dictForASCII = new(){
+    {"A", "65"},
+    {"B", "66"},
+    {letter.ToString().ToUpper(),  $"{(int)letter}"}
+};
+
+dictForASCII.Add("D", "68");
+
+Console.WriteLine(dictForASCII["A"]);
+Console.WriteLine(dictForASCII["C"]);
+Console.WriteLine(dictForASCII["D"]);
+
+string D_Key = "D";
+Console.WriteLine(dictForASCII[D_Key]);
+
+// Console.WriteLine(dictForASCII["Z"]);
+
+foreach (var (key, val) in dictForASCII)
+{
+    Console.WriteLine($"key: {key}, value:{val}");
+}
+
 ```
 
 ### 📝 小練習
