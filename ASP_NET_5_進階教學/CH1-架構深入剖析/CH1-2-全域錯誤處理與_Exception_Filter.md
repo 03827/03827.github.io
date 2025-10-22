@@ -33,13 +33,15 @@ public class Startup
         }
         else
         {
-            app.UseExceptionHandler("/Home/Error");
+            //使用自訂錯誤處理時，就不要再用 .Net 預設的
+            //app.UseExceptionHandler("/Home/Error");
+            
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
-        // 自訂「Correlation Id」中介層（選配，見下方）
-        app.UseMiddleware<CorrelationIdMiddleware>();
+        // 自訂錯誤處理
+        app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
         app.UseStaticFiles();
         app.UseRouting();
@@ -88,9 +90,6 @@ public class GlobalExceptionFilter : IExceptionFilter
 
     private IActionResult MakeResult(ExceptionContext ctx, string message, string traceId)
     {
-        var request = ctx.HttpContext.Request;
-        var accept = request.Headers["Accept"].ToString();
-        
         return Redirect("https://ap.taisugar.com.tw/單一入口網址");
     }    
 }
@@ -156,34 +155,6 @@ public class GlobalExceptionHandlingMiddleware
 
 ---
 
-## 7. Correlation Id（跨系統追蹤）🧭
-
-```csharp
-public class CorrelationIdMiddleware
-{
-    public const string HeaderName = "X-Correlation-ID";
-    private readonly RequestDelegate _next;
-
-    public CorrelationIdMiddleware(RequestDelegate next) => _next = next;
-
-    public async Task Invoke(HttpContext context)
-    {
-        var correlationId = context.Request.Headers[HeaderName].FirstOrDefault()
-                            ?? Guid.NewGuid().ToString("N");
-        context.Response.Headers[HeaderName] = correlationId;
-
-        // 也可寫入 Items 供後續 Filter/Controller 使用
-        context.Items[HeaderName] = correlationId;
-
-        await _next(context);
-    }
-}
-```
-
-> 日誌結合：在 `ILogger` 的 scope 中把 Correlation Id 帶上，查問題時非常好用。
-
----
-
 ## 8. Controller 範例（觸發例外、Ajax 與 HTML）🧪
 
 ```csharp
@@ -195,7 +166,7 @@ public class SampleController : Controller
     [HttpGet("/calc/{x:int}/{y:int}")]
     public IActionResult Calc(int x, int y)
     {
-        if (y == 0) throw new DomainException("除數不可為 0", 400);
+        if (y == 0) throw new Exception("除數不可為 0", 400);
         var result = x / y;
         return View(model: result); // 對 HTML 頁面
     }
@@ -203,7 +174,7 @@ public class SampleController : Controller
     [HttpGet("/api/calc")]
     public IActionResult CalcApi([FromQuery]int x, [FromQuery]int y)
     {
-        if (y == 0) throw new DomainException("Divide by zero", 400);
+        if (y == 0) throw new Exception("Divide by zero", 400);
         return Ok(new { result = x / y });
     }
 }
@@ -216,32 +187,5 @@ public class SampleController : Controller
 - `GET /api/calc?x=10&y=0`
 
   - JSON：回傳 `ProblemDetails`（`400` 與 `detail`）
-
----
-
-## 9. 回應格式與內容協商（HTML / JSON）🧪
-
-- 檢查 `Accept` header 或 AJAX header (`X-Requested-With`)
-- MVC：`View()` for HTML、`ObjectResult(ProblemDetails)` for JSON
-- API / 前後端分離：使用 `application/problem+json` 搭配 `ProblemDetails`（標準化）
-
----
-
-## 10. 404/403 等非例外狀態碼處理 🪪
-
-- `UseStatusCodePagesWithReExecute("/Error/{0}")`
-- `ErrorController.ErrorByCode(int code)` 負責渲染 403/404/405…
-- JSON 情境下仍可回 `ProblemDetails`，加上 `TraceIdentifier` 幫助追蹤。
-
----
-
-## 11. 安全與實務守則 🔐
-
-- **Production 禁用** `DeveloperExceptionPage`。
-- 不要在錯誤頁或 JSON 回應中曝露 **堆疊、連線字串、檔案路徑**。
-- 針對常見領域錯誤（驗證失敗、資源不存在、權限不足），**用自訂例外 + 對應狀態碼**。
-- 所有錯誤**記錄日誌**，至少包含：`TraceId/CorrelationId`、`Route`、`UserId`（若有）。
-- 對外 API 統一 `ProblemDetails`；前端可依 `status` 與 `title/detail` 呈現。
-- 不要濫用例外處理流程來做業務邏輯分支；預期錯誤用**回傳值**或**模型驗證**更好。
 
 ---

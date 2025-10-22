@@ -59,7 +59,7 @@ private static async Task TxA(DbContextOptions<AppDbContext> opt)
     order.Status = 1;
     await ctx.SaveChangesAsync();
 
-    await Task.Delay(200); // 模擬業務邏輯停頓
+    await Task.Delay(2000); // 模擬業務邏輯停頓
 
     var product = await ctx.Products.FirstAsync(p => p.Id == order.ProductId);
     product.Stock -= 1;
@@ -77,7 +77,7 @@ private static async Task TxB(DbContextOptions<AppDbContext> opt)
     product.Stock -= 1;
     await ctx.SaveChangesAsync();
 
-    await Task.Delay(200);
+    await Task.Delay(2000);
 
     var order = await ctx.Orders.FirstAsync(o => o.ProductId == product.Id);
     order.Status = 2;
@@ -252,6 +252,8 @@ var pending = await ctx.Orders
 
     pending.Status = 1;
 
+    await Task.Delay(2000);
+
 await ctx.SaveChangesAsync();
 
 await tx.CommitAsync();
@@ -264,7 +266,26 @@ await tx.CommitAsync();
 **用法：**
 
 ```csharp
-
+//本次連線，最多等待解鎖30秒
+await ctx.Database.ExecuteSqlRawAsync("SET LOCK_TIMEOUT 30000");
+try
+{
+    var acct = await ctx.Accounts
+        .FromSqlInterpolated($@"
+            SELECT * FROM Accounts
+            WITH (UPDLOCK, ROWLOCK)
+            WHERE [Id] = {2}")
+        .FirstOrDefaultAsync();
+}
+catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Number == 1222)
+{
+    // 1222代表等待解鎖逾時
+    throw new TimeoutException("查詢超過 30 秒仍被鎖定，已中止。", ex);
+}
+finally
+{
+    await ctx.Database.ExecuteSqlRawAsync("SET LOCK_TIMEOUT -1");
+}
 ```
 
 ---

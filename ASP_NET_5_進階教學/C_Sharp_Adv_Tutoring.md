@@ -25,12 +25,24 @@ C# 9 於 .NET 5 時期問世，是微軟讓 C# 更加「資料導向（data-orie
 * 支援 **複製（copy）** 與 **部分更新（with expression）**
 
 ### 2.2 基本語法
+```csharp
+class Person {
+    string Name {get; init;}
+    int Age {get; init;}
+}
+
+var p1 = new Person() { Name = "Alice", Age = 30, };
+var p2 = new Person() { Name = "Alice", Age = 30, };
+
+// 值相同即相等
+Console.WriteLine(p1 == p2); // False
+```
 
 ```csharp
 public record Person(string Name, int Age);
 
 var p1 = new Person("Alice", 30);
-var p2 = new Person("Alice", 30);
+var p2 = new Person(Age: 30, Name: "Alice");
 
 // 值相同即相等
 Console.WriteLine(p1 == p2); // True
@@ -92,19 +104,24 @@ public class User
 {
     public string Name { get; init; }
     public int Age { get; init; }
+    public readonly string phone = "091111111111";
 }
 
 var u1 = new User { Name = "Tom", Age = 20 };
 // u1.Age = 30; // ❌ 錯誤，init 屬性無法在初始化後修改
 ```
 
-### 4.3 與 Record 的結合
+### 4.3 手動設置 Record 欄位內容
 
 ```csharp
 public record UserProfile
 {
     public string Account { get; init; }
-    public string Email { get; init; }
+    public string Email
+    {
+        //由Account 組成 a03827@taisugar.com.tw
+        get => $"a{Account}@taisugar.com.tw";
+    }
 }
 ```
 
@@ -125,7 +142,7 @@ public record PersonRecord(string Name, int Age, int Gender);
 
 //使用方式：n is "03827", g is 0
 var (n, _, g) = new PersonRecord("03827", 18, 0);
-
+Console.Write($"姓名：{n}, 性別：{g}");
 
 //定義一個含有 Deconstruct 的 Class
 public class PersonClass
@@ -144,7 +161,7 @@ public class PersonClass
 }
 
 //使用方式：age is 16, gen is 1
-var (age, gen, _) = new PersonClass()
+var (myAge, gen, _) = new PersonClass()
 {
     Name = "03827",
     Age = 16,
@@ -184,7 +201,7 @@ switch (number)
 ```csharp
 //switch 簡化 + when 達成子條件：
 int number = 55;
-var judge = number switch
+string judge = number switch
 {
     < 0 => "負數",
     >= 0 when number <= 10 => "0 到 10 之間",
@@ -203,13 +220,13 @@ Console.WriteLine($"數字：{number}, 判斷：{judge}"); //數字：55, 判斷
 var person = new Person("03827", 16, 0);           
 switch (person)
 {
-    case PersonRecord p when p.Age < 18:
+    case Person p when p.Age < 18:
         Console.WriteLine("未成年");
         break;
-    case PersonRecord p when p.Age >= 18 && p.Age <= 150:
+    case Person p when p.Age >= 18 && p.Age <= 150:
         Console.WriteLine("成年人");
         break;
-    case PersonRecord p when p.Age > 150:
+    case Person p when p.Age > 150:
         Console.WriteLine("不是人");
         break;
     default:
@@ -259,7 +276,10 @@ string category = person switch
 
 ```csharp
 if (x is >= 0 and <= 100)
-    Console.WriteLine("In range");
+    Console.WriteLine("x is 0~100");
+
+if (x is not (>= 200 or <= 100))
+    Console.WriteLine("x 不符合");
 
 if (y is not null)
     Console.WriteLine("Value exists");
@@ -279,7 +299,10 @@ if (person is { Age: > 18, Name: "Alice" })
 C# 9 允許右邊的 `new()` 省略型別，只要從左邊能推斷出。
 
 ```csharp
-List<int> numbers = new();
+List<int> numbers = new List<int>(); //old way
+var numbers = new List<int>();
+
+List<int> numbers = new (); //new way
 Point p = new(3, 4);
 Dictionary<string, int> dict = new();
 ```
@@ -299,6 +322,11 @@ abstract class Shape
 }
 
 class Circle : Shape
+{
+    public override Circle Clone() => new Circle();
+}
+
+class Triangle : Shape
 {
     public override Circle Clone() => new Circle();
 }
@@ -335,14 +363,28 @@ void calc(int a, int b)
     //two in, no out
     Action<int, int> sum3 = (a, b) => Console.WriteLine(a + b + extra);
 
-    int _cal(int _a, int _b, int _c)
+    int _cal(int _a, int _b, int _c, Action<int, int> act)
     {
-        return _a + _b + _c + extra; //extra 可以讀取
+        bool isSomethingDone = true;
+        if (isSomethingDone && act is not null)
+        {
+            //呼叫 act 這個函式，用以通知 Something Done
+            act(9, 20); //_cal 不知道 act 會跑些什麼，只知道我丟了什麼值進去
+        }
+
+        return _a + _b + _c; //extra 可以讀取
     }
+
+    //(myA, myB) => Console.WriteLine(myA - MyB)
+    //上面這個匿名函式知道自己要做些什麼，但不知道參數值會是什麼，由呼叫我的人丟進來。
+    _cal(3, 6, 9, (myA, myB) => Console.WriteLine(myA - myB));
+
+    _cal(3, 6, 9, sum3);
 
     static int _cal2(int _a, int _b, int _c)
     {
-        return _a + _b + _c + extra; //extra 無法讀取
+        int ex = 5;
+        return _a + _b + _c + ex + extra; //extra 無法讀取
     }
 
     Console.WriteLine(_cal(a, b, 6));
