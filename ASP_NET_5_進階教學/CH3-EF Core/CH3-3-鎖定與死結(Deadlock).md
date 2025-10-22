@@ -276,6 +276,8 @@ try
             WITH (UPDLOCK, ROWLOCK)
             WHERE [Id] = {2}")
         .FirstOrDefaultAsync();
+
+        ctx.Commit();
 }
 catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Number == 1222)
 {

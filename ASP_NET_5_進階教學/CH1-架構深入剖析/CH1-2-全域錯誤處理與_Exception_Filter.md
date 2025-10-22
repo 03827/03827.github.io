@@ -123,6 +123,7 @@ public class GlobalExceptionHandlingMiddleware
         {
             //如果都沒發生錯誤就一路往下執行，直至 Controller/Action
             await _next(context);
+            //請求完成要做的事
         }        
         catch (Exception ex)
         {
